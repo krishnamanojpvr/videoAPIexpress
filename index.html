@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="vidform">
+        <input type="file" name="video" id="vid" placeholder="select file">
+        <button type="button" onclick="postVid()">Upload</button>
+    </form>
+    <button onclick="getVid()">Get Video</button>
+    <!-- <div id="vu"></div> -->
+    <video id="videoPlayer" width="320" height="240" controls style="display: none;">
+        <source id="videoSource" src="" type="video/mp4">
+    </video>
+</body>
+<script>
+    async function postVid(){
+        let form = document.getElementById('vidform');
+        let formData = new FormData(form);
+        let res = await fetch('http://localhost:5000/download', {
+            method: 'POST',
+            body: formData
+        });
+        // Handle plain text response
+    if (res.ok) {
+        console.log('Video uploaded successfully');
+    } else {
+        console.error('Error uploading video');
+    }
+    }
+    async function getVid() {
+        let videoPlayer = document.getElementById('videoPlayer');
+        let videoSource = document.getElementById('videoSource');
+
+        videoSource.src = 'http://localhost:5000/video';
+        videoPlayer.style.display = 'block';
+        videoPlayer.load();
+    }
+</script>
+</html>
